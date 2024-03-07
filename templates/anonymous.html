@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Reporting</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-image: url('/static/ann.jpg'); 
+            background-size: cover;
+            background-repeat: no-repeat;
+            padding-top: 50px; /* Add space from the top for fixed navbar */
+            color: #000; /* Set default text color */
+        }
+
+        .container {
+            max-width: 600px; /* Set maximum width for better layout on larger screens */
+            margin: auto; /* Center the container */
+            background-color: rgba(94, 148, 223, 0.9); /* Set background color for form container with transparency */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            position: relative; /* Set position relative for label */
+            top: -10px; /* Shift label up */
+            background-color: white; /* Add white background behind label */
+            padding: 0 5px; /* Add padding for better appearance */
+        }
+
+        .btn-submit {
+            background-color: #053661; /* Set button background color */
+            color: #fff; /* Set button text color */
+            border: none; /* Remove border */
+            border-radius: 20px; /* Add border radius */
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3; /* Change button background color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Anonymous Crime Reporting</h1>
+        <form method="POST" enctype="multipart/form-data" class="needs-validation">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-submit btn-block">Submit Report</button>
+        </form>
+		<p style="font-style: italic;">Go Back to Homepage <a style='color: #fff;' href="{% url 'index' %}">Click Here</a></p>
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Arial', sans-serif;
+    }
+    .about-section {
+      padding: 50px 0;
+      background-color: #007bff;
+      color: #fff;
+      text-align: center;
+    }
+    .container-bg {
+      /* height: 50vh; */
+      /* display: flex; */
+      color: blue;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .team-section {
+      padding: 50px 0;
+      text-align: center;
+      background-color: #f8f9fa;
+    }
+    .team-member {
+      margin-bottom: 30px;
+    }
+    .team-member img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 5px solid #007bff;
+      transition: transform 0.3s ease-in-out;
+    }
+    .team-member img:hover {
+      transform: scale(1.1);
+    }
+    .team-member h3 {
+      margin-top: 20px;
+      color: #007bff;
+    }
+    .team-member p {
+      color: #666;
+    }
+    h1 {
+      color: white;
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    h4 {
+      color: #007bff;
+      font-size: 1.5rem;
+      margin-top: 30px;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    .feature-list {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    .feature-list li {
+      margin-bottom: 10px;
+      padding-left: 20px;
+      position: relative;
+      font-size: 1.1rem;
+    }
+    .feature-list li::before {
+      content: '\2022';
+      position: absolute;
+      left: 0;
+      color: #007bff;
+      font-weight: bold;
+    }
+    .feature-list li:last-child {
+      margin-bottom: 0;
+    }
+    .join-us-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1.2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 15%;
+      transition: background-color 0.3s ease;
+      display: flex;
+     justify-content: space-evenly;
+    }
+    .join-us-button:hover {
+      background-color: #0056b3;
+    }
+    .team-section h2,h4 {
+      margin-bottom: 40px;
+      color: #007bff;
+      font-size: 2.5rem;
+    }
+	.navbar-brand,
+        .nav-link,
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: bold;
+        }
+  </style>
+</head>
+<body>
+  {% load static %}
+	{% include 'navbar.html' %}
+
+  
+  <h4>About Us</h4>
+      
+
+    <h3>Welcome to ComSafety , a community-driven crime reporting platform dedicated to enhancing safety and security in our neighborhoods.</h3>
+        
+    <h4>Our Mission</h4>
+    <p>At ComSafety, our mission is to empower citizens and law enforcement agencies by providing a reliable platform for reporting and addressing criminal activities. We believe in fostering collaboration between community members and law enforcement to create safer environments for everyone.</p>
+
+    <h4>Our Vision</h4>
+    <p>We envision a world where every community member feels safe and empowered to report crime without fear, leading to swift and effective responses from law enforcement agencies.</p>
+
+    <h4>What We Offer</h4>
+    <ul class="feature-list">
+      <li>Citizen Reporting: Citizens can easily report crimes directly from their devices, contributing valuable information to help combat criminal activities in their communities.</li>
+      <li>Anonymous Reporting: We understand that some individuals may be hesitant to report crimes due to safety concerns. That's why we offer an anonymous reporting feature, allowing users to report incidents while protecting their privacy.</li>
+      <li>Law Enforcement Integration: Our platform provides law enforcement agencies with access to reported crimes, enabling them to efficiently manage and respond to incidents. Law enforcement personnel can update the status of reports, coordinate efforts, and access additional resources as needed.</li>
+    </ul>
+
+    <h4>Our Team</h4>
+    <p>Meet the dedicated team behind ComSafety, committed to building innovative solutions to address community safety challenges.</p>
+
+    <div class="team-section">
+      <h2>Meet Our Team</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="team-member">
+            <img src="{% static 'chio.jpg' %}" alt="Chioma">
+            <h3>Chioma Zara Nnadi</h3>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="team-member">
+            <img src="{% static 'pic3.jpg' %}" alt="Sharon">
+            <h3>Egbedokun Sharon</h3>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="team-member">
+            <img src="{% static 'Inumidun.jpg' %}" alt="Inumidun">
+            <h3>Inumidun Owoseni</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Get Involved</h4>
+    <p>Join us in our mission to create safer communities. Whether you're a concerned citizen, a law enforcement agency, or a community advocate, there are various ways to get involved:</p>
+    <ul class="feature-list">
+      <li>Register: Sign up as a user to report crimes, access resources, and stay informed about safety initiatives.</li>
+      <li>Spread the Word: Help us raise awareness by sharing our platform with your friends, family, and community networks.</li>
+      <li>Collaborate: If you represent a law enforcement agency or community organization, reach out to explore potential partnerships and collaboration opportunities.</li>
+    </ul>
+
+    <div class="join-us-button">Join Us</div>
+
+    <h4>Contact Us</h4>
+    <p>Have questions, suggestions, or feedback? We'd love to hear from you! Feel free to reach out to our team at <i>imperialightscollege@gmail.com</i> .</p>
+  </div>
+
+  
+
+</body>
+</html>

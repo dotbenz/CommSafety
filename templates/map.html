@@ -1,0 +1,241 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Law Agent Dashboard</title>
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous">
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <!-- Include Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <!-- Include Folium map CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/folium/0.12.1/leaflet.css" />
+    <!-- Include Folium map JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/folium/0.12.1/leaflet.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to right, #33659b, #33659b); /* Light blue gradient */
+            padding-top: 60px;
+            z-index: 1000;
+            transition: width 0.5s;
+            box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.2);
+            border-right: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333333; /* Dark gray text */
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .card-header {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .card-body {
+            background-color: #f8f9fa;
+        }
+
+        .my-card:hover {
+            transform: scale(1.05);
+            transition: 0.3s;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        /* Ensure all cards have equal height */
+        .card {
+            height: 100%;
+        }
+
+        /* Increase width of cards */
+        .my-card {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+      <div class="sidebar">
+        <a href="#" class="navbar-brand text-white mb-5"><i class='bx bxs-group'></i>Comsafety</a>
+        <a href="#" class="text-decoration-none text-white"><i class='bx bxs-dashboard' ></i>Dashboard</a>
+        <a href="#" class="text-decoration-none text-white"><i class='bx bxs-user'></i>Profile</a>
+        <a href="{% url 'agent-portal' %}" class="text-decoration-none text-white"><i class='bx bxs-file'></i>Crime Reports</a>
+        <a href="{% url 'stats' %}" class="text-decoration-none text-white"><i class='bx bxs-bar-chart-alt-2' ></i>Crime Analytics</a>
+        <a href="{% url 'map' %}" class="text-decoration-none text-white"><i class='bx bxs-map'></i>Use Map</a>
+        <a href="{% url 'logout' %}" class="text-decoration-none text-white"><i class='bx bxs-log-out-circle' ></i>Logout</a>
+    </div>
+
+    
+
+   
+    <!-- Content -->
+    <div class="content">
+        <!-- Topside -->
+        <div class="container">
+            <div class="row mt-4">
+                <!-- <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-secondary">
+                            Information
+                        </div>
+                        <div class="card-body">
+                            <h5 class="my-4">@Username Welcome To Your dashboard</h5>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-secondary">
+                            <!-- Navigate -->
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <a href="{% url 'agent-portal' %}" class="text-decoration-none">
+                                        <div class="card my-card bg-primary shadow text-white text-center p-3">
+                                            <h4>Crime Report </h4><h4><i class='bx bxs-file'></i></h4>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="{% url 'stats' %}" class="text-decoration-none">
+                                        <div class="card my-card bg-danger text-white shadow text-center p-3">
+                                            <h4>Crime Analytics </h4><h4><i class='bx bxs-bar-chart-alt-2' ></i></h4>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="{% url 'map' %}" class="text-decoration-none">
+                                        <div class="card my-card bg-secondary text-white shadow text-center p-3">
+                                            <h4>Use Map </h4><h4><i class='bx bxs-map'></i></h4>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Topside -->
+		 <!-- Search box and button -->
+<div class="input-group mb-3">
+    <input type="text" id="searchBox" class="form-control" placeholder="Search for a location...">
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="button" id="searchButton">Search</button>
+    </div>
+</div>
+<div id="map" style="width: 100%; height: 600px;"></div>
+<script>
+    // Initialize map
+    var mymap = L.map('map').setView([9.0820, 8.6753], 3); // Centered on Nigeria
+    
+    // Define base layers
+    var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    });
+    
+    var stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.'
+    });
+    
+    // Add Stamen Terrain as the default base layer
+    stamenLayer.addTo(mymap);
+    
+    // Add OpenStreetMap as another base layer
+    osmLayer.addTo(mymap);
+    
+    // Define overlay layers
+    var overlayLayers = {
+        "OpenStreetMap": osmLayer,
+        "Stamen Terrain": stamenLayer
+    };
+    
+    // Add LayerControl to map
+    L.control.layers(overlayLayers).addTo(mymap);
+    
+    // Function to handle search action
+    function performSearch() {
+        // Get the value from the search box
+        var query = document.getElementById('searchBox').value;
+        
+        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + query)
+            .then(response => response.json())
+            .then(data => {
+                // Check if any results are returned
+                if (data.length > 0) {
+                    // Get the coordinates of the first result
+                    var lat = parseFloat(data[0].lat);
+                    var lon = parseFloat(data[0].lon);
+                    
+                    // Fly to the searched location with animation
+                    mymap.flyTo([lat, lon], 15);
+                    
+                    // Add a marker at the searched location
+                    L.marker([lat, lon]).addTo(mymap).bindPopup(query);
+                } else {
+                    // Alert the user if no results are found
+                    alert('No results found for: ' + query);
+                }
+            })
+            .catch(error => {
+                // Alert the user if there's an error
+                console.error('Error fetching search results:', error);
+                alert('Error fetching search results. Please try again.');
+            });
+    }
+    
+    // Add event listener to the search button
+    document.getElementById('searchButton').addEventListener('click', performSearch);
+</script>
+
+        
+    </div>
+
+    <!-- JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

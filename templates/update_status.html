@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Crime</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        .container {
+            max-width: 600px; /* Set maximum width for better layout on larger screens */
+            margin: auto; /* Center the container */
+            background-color: #fff; /* Set background color for form container with transparency */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            position: relative; /* Set position relative for label */
+            top: -10px; /* Shift label up */
+            background-color: white; /* Add white background behind label */
+            padding: 0 5px; /* Add padding for better appearance */
+        }
+
+        .btn-submit {
+            background-color: #053661; /* Set button background color */
+            color: #fff; /* Set button text color */
+            border: none; /* Remove border */
+            border-radius: 20px; /* Add border radius */
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3; /* Change button background color on hover */
+        }
+    </style>
+</head>
+<body>
+	<div class="col-md-6 offset-md-3">
+		<br>
+		
+	<div class="card">
+		<div class="card-header bg-info"><h2 style="color: white;">Report Details</h2>
+		</div>
+		<div class="card-body">
+	  <p class="card-text">
+	  <strong>Crime: </strong>{{ report.crime }}</p>
+	  
+	  <p class="card-text">
+	  <strong>Description: </strong>{{ report.description }}
+	  </p>
+	  
+	  <p class="card-text"><strong>Crime Location: </strong><a href="{% url 'map' %}">{{ report.crime_location }}</a>
+	  </p>
+	  
+	  <!-- Display the image evidence with a specific size -->
+<p class="card-text">
+    <strong>Image Evidence: </strong><br>
+    <img src="{{ report.image_evidence.url }}" alt="Image Evidence" style="width: 300px; height: auto;">
+</p>
+
+	  
+	  <p class="card-text">
+	  <strong>Create At: </strong>{{ report.created_at }}</p>
+	  
+		</div>
+	  </div>
+	
+	</div>
+	<br>
+    <div class="container">
+        <h1>Update Crime Status</h1>
+        <form method="POST" enctype="multipart/form-data" class="needs-validation">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-submit btn-block">Update Status</button>
+        </form>
+		<p style="font-style: italic;">Go Back to Dashboard <a style='color: #f7072f;' href="{% url 'agent-portal' %}">Click Here</a></p>
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

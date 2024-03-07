@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Law Agent Dashboard</title>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu"
+        crossorigin="anonymous">
+         <!--Chartjs CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+.sidebar {
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to right, #33659b, #33659b); /* Light blue gradient */
+  padding-top: 60px;
+  z-index: 1000;
+  transition: width 0.5s;
+  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.2);
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar a {
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #333333; /* Dark gray text */
+  display: block;
+  transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+  background-color: #495057;
+}
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .card-header {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .card-body {
+            background-color: #f8f9fa;
+        }
+
+        .my-card:hover {
+            transform: scale(1.05);
+            transition: 0.3s;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        /* Ensure all cards have equal height */
+        .card {
+            height: 100%;
+        }
+
+        /* Increase width of cards */
+        .my-card {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#" class="navbar-brand text-white mb-5"><i class='bx bxs-group'></i>Comsafety</a>
+        <a href="#" class="text-decoration-none text-white"><i class='bx bxs-dashboard' ></i>Dashboard</a>
+        <a href="#" class="text-decoration-none text-white"><i class='bx bxs-user'></i>Profile</a>
+        <a href="{% url 'agent-portal' %}" class="text-decoration-none text-white"><i class='bx bxs-file'></i>Crime Reports</a>
+        <a href="{% url 'stats' %}" class="text-decoration-none text-white"><i class='bx bxs-bar-chart-alt-2' ></i>Crime Analytics</a>
+        <a href="{% url 'map' %}" class="text-decoration-none text-white"><i class='bx bxs-map'></i>Use Map</a>
+        <a href="{% url 'logout' %}" class="text-decoration-none text-white"><i class='bx bxs-log-out-circle' ></i>Logout</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Topside -->
+        <div class="container">
+            <div class="row mt-4">
+                <!-- <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-secondary">
+                            Information
+                        </div>
+                        <div class="card-body">
+                            <h5 class="my-4">@Username Welcome To Your dashboard</h5>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-secondary">
+                            <!-- Navigate -->
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <a href="{% url 'agent-portal' %}" class="text-decoration-none">
+                                        <div class="card my-card bg-primary shadow text-white text-center p-3">
+                                            <h4>Crime Report </h4><h4><i class='bx bxs-file'></i></h4>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="{% url 'stats' %}" class="text-decoration-none">
+                                        <div class="card my-card bg-danger text-white shadow text-center p-3">
+                                            <h4>Crime Analytics </h4><h4><i class='bx bxs-bar-chart-alt-2' ></i></h4>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="{% url 'map' %}" class="text-decoration-none">
+                                        <div class="card my-card bg-secondary text-white shadow text-center p-3">
+                                            <h4>Use Map </h4><h4><i class='bx bxs-map'></i></h4>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Topside -->
+        <!--Graphs-->
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-md-6">
+                <div class="bg-white">
+                    <canvas id="myChart1" width="400" height="300"></canvas>
+                    <script>
+                        var ctx = document.getElementById('myChart1').getContext('2d');
+                        var myChart1 = new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: ['Kidnapping', 'Murder', 'Fraud', 'Banditry', 'Rape', 'Theft'],
+                                datasets: [{
+                                    label: 'Crime statistics',
+                                    data: [12, 19, 3, 5, 2, 3],
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-white">
+                    <canvas id="myChart" width="400" height="300"></canvas>
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['Kidnapping', 'Murder', 'Fraud', 'Banditry', 'Rape', 'Theft'],
+                                datasets: [{
+                                    label: 'Crime Statistics',
+                                    data: [12, 19, 3, 5, 2, 3],
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Graphs-->
+
+    </div>
+
+    <!-- JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
