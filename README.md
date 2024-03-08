@@ -1,12 +1,12 @@
 # CommSafety
-**Overview**
+**Overview** <br/>
 **CommSafety** is a web-based application designed to facilitate the reporting and tracking of criminal incidents within a community. The application allows users to submit reports of criminal activities anonymously, view reported incidents on a map, and stay informed about safety concerns in their area. It aims to empower communities by providing a platform for sharing information and collaborating with law enforcement agencies to improve safety and security.
 
 **Features**
-**Anonymous Reporting**: Users can submit reports of criminal incidents without revealing their identity, ensuring confidentiality and encouraging participation.
-**Interactive Map**: The application provides an interactive map interface where users can visualize reported incidents and filter them based on various criteria such as location, type of crime, and date.
-**Real-time Updates**: Reported incidents are displayed in real-time on the map, allowing users to stay informed about recent events in their area.
-**User Authentication**: Registered users can create accounts to access additional features such as saving favorite locations, receiving personalized alerts, and contributing to community discussions.
+**Anonymous Reporting**: Users can submit reports of criminal incidents without revealing their identity, ensuring confidentiality and encouraging participation.<br/>
+**Interactive Map**: The application provides an interactive map interface where users can visualize reported incidents and filter them based on various criteria such as location, type of crime, and date.<br/>
+**Real-time Updates**: Reported incidents are displayed in real-time on the map, allowing users to stay informed about recent events in their area.<br/>
+**User Authentication**: Registered users can create accounts to access additional features such as saving favorite locations, receiving personalized alerts, and contributing to community discussions.<br/>
 **Admin Panel**: Administrators have access to an admin panel where they can manage reported incidents, moderate user-generated content, and communicate with users. <br/>
 **Technologies Used**
 Frontend: HTML, CSS, JavaScript, Bootstrap
@@ -15,7 +15,7 @@ Database: SQLite
 Mapping: Leaflet.js, OpenStreetMap
 Authentication: Django Authentication System
 Notifications: Django Signals, Email/Text Notifications API
-Deployment: AWS EC2
+Deployment: AWS EC2<br/>
 
 **Installation and Setup**
 1. Clone Repository
