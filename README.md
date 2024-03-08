@@ -1,6 +1,5 @@
 # CommSafety
-##Community Safety Application
-Overview
+**Overview**
 **CommSafety** is a web-based application designed to facilitate the reporting and tracking of criminal incidents within a community. The application allows users to submit reports of criminal activities anonymously, view reported incidents on a map, and stay informed about safety concerns in their area. It aims to empower communities by providing a platform for sharing information and collaborating with law enforcement agencies to improve safety and security.
 
 **Features**
