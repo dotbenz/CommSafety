@@ -33,11 +33,11 @@ Deployment: AWS EC2<br/>
 https://bit.ly/komsafety
 
 
-**Usage**
-Sign up for an account or log in if you already have one.
-Explore the map to view reported incidents in your area.
-Use the search functionality to find incidents by location or type of crime.
-Submit a report if you witness a criminal activity or safety concern.
+**Usage**<br/>
+Sign up for an account or log in if you already have one. <br/>
+Explore the map to view reported incidents in your area.<br/>
+Use the search functionality to find incidents by location or type of crime.<br/>
+Submit a report if you witness a criminal activity or safety concern.<br/>
 Stay informed about safety alerts and community initiatives through notifications.
 
 **License**
