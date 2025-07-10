@@ -7,6 +7,8 @@ from .forms import AnonymousReportForm, CitizenReportForm, CitizenReportStatusFo
 from .models import CitizenReport, AnonymousReport, Profile
 from django.contrib.auth.decorators import login_required
 import folium, geocoder
+from django.http import HttpResponse
+
 
 
 def index(request):
@@ -15,20 +17,26 @@ def index(request):
 def about(request):
     return render(request, 'about.html', {})
 
+# @login_required(login_url='index')
+# def map(request):
+#     # Get coordinates of a location 
+#     location = geocoder.osm("Nigeria")
+#     lat, lng = location.latlng
+
+#     # Create a Folium map centered at the location
+#     m = folium.Map(location=[lat, lng], zoom_start=12)
+
+#     # Add a marker for the location
+#     folium.Marker([lat, lng], popup='Nigeria').add_to(m)
+
+#     # Render the map to the template
+#     return render(request, 'map.html', {'map': m})
+
 @login_required(login_url='index')
 def map(request):
-    # Get coordinates of a location 
-    location = geocoder.osm("Nigeria")
-    lat, lng = location.latlng
+    return render(request, 'map.html')
 
-    # Create a Folium map centered at the location
-    m = folium.Map(location=[lat, lng], zoom_start=12)
 
-    # Add a marker for the location
-    folium.Marker([lat, lng], popup='Nigeria').add_to(m)
-
-    # Render the map to the template
-    return render(request, 'map.html', {'map': m})
     
 @login_required(login_url='index')
 def stats(request):
