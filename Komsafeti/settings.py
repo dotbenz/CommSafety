@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'dashboard',
+    'channels',
     'folium',
     'geocoder',
 	'crispy_forms',
