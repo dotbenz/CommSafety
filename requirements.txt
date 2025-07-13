@@ -18,12 +18,14 @@ django-crispy-forms==2.4
 folium==0.20.0
 future==1.0.0
 geocoder==1.38.1
+gunicorn==23.0.0
 hyperlink==21.0.0
 idna==3.10
 incremental==24.7.2
 Jinja2==3.1.6
 MarkupSafe==3.0.2
 numpy==2.3.1
+packaging==25.0
 pillow==11.3.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
