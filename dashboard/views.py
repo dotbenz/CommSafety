@@ -8,6 +8,8 @@ from .models import CitizenReport, AnonymousReport, Profile
 from django.contrib.auth.decorators import login_required
 import folium, geocoder
 from django.http import HttpResponse
+from .models import ChatMessage
+
 
 
 
@@ -271,4 +273,15 @@ def profile_update(request):
 
 
 
-
+# 7. Add to views.py
+@login_required(login_url='index')
+def chat(request):
+    # Check if user is an agent to determine UI
+    is_agent = request.user.groups.filter(name='Law Enforcement Agents').exists()
+    recent_messages = ChatMessage.objects.select_related('sender').order_by('-timestamp')[:50][::-1]
+    
+    context = {
+        'is_agent': is_agent,
+        'recent_messages': recent_messages,
+    }
+    return render(request, 'chat.html', context)

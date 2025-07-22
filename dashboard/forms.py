@@ -39,3 +39,19 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['phone', 'address', 'image']
+
+
+#from django import forms
+from .models import ChatMessage
+
+class ChatMessageForm(forms.ModelForm):
+    class Meta:
+        model = ChatMessage
+        fields = ['message']
+        widgets = {
+            'message': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Type your message...',
+                'autocomplete': 'off'
+            })
+        }

@@ -27,6 +27,35 @@
     transform: scale(1.1);
     transition: 0.2s ease-in-out;
 }
+
+
+
+.floating-chat-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,123,255,0.4);
+    z-index: 1000;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.floating-chat-btn:hover {
+    transform: scale(1.1);
+    color: white;
+    text-decoration: none;
+}
 	</style>
 
     <title>Citizen Dashboard</title>
@@ -50,6 +79,10 @@
                         <a class="nav-link text-white" href=""><i class='bx bxs-dashboard' ></i>Dashboard <span
                                 class="sr-only">(current)</span></a>
                     </li>
+                    <!-- ADD THIS LINE -->
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'chat' %}"><i class='bx bx-chat'></i>Live Chat</a>
+        </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
@@ -123,6 +156,12 @@
 </div>
 
     <!--End Table-->
+
+
+    <!-- Add floating chat button to citizen.html (add this before closing </body> tag) -->
+<a href="{% url 'chat' %}" class="btn btn-primary floating-chat-btn" title="Live Chat with Agents">
+    <i class='bx bx-chat bx-lg'></i>
+</a>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

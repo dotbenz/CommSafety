@@ -23,4 +23,7 @@ urlpatterns = [
 	path('update_status/<int:pk>', views.update_status, name='update_status'),
 	path('dashboard-profile/', views.profile, name='profile'),
 	path('profile_update/', views.profile_update, name='profile_update'),
+    #path('chat/', views.chat, name='chat'),
+     # ADD THIS LINE
+    path('chat/', views.chat, name='chat'),
 ]

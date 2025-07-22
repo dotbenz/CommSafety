@@ -156,3 +156,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CRISPY_TEMPLATE_PACK = 'bootstrap'  # Specify the desired template pack, e.g., 'bootstrap4'
 
 
+# Add at the end of settings.py
+ASGI_APPLICATION = 'Komsafeti.asgi.application'
+
+# In-memory channel layer (no Redis needed)
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+

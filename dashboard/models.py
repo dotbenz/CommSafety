@@ -91,3 +91,19 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.user.username}-Profile'
+    
+
+# Update models.py - Add ChatMessage model
+
+class ChatMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages', null=True, blank=True)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_agent_broadcast = models.BooleanField(default=False)  # For agent availability broadcasts
+    
+    class Meta:
+        ordering = ['timestamp']
+    
+    def __str__(self):
+        return f'{self.sender.username}: {self.message[:50]}'
