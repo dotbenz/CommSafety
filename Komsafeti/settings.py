@@ -167,3 +167,19 @@ CHANNEL_LAYERS = {
 }
 
 
+# If you're using HTTPS in production, add:
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False  # Set to True if you want to force HTTPS
+
+# WebSocket specific settings for production
+if 'DYNO' in os.environ or 'RENDER' in os.environ:  # Detect if running on Heroku or Render
+    # Use Redis for production (recommended)
+    # CHANNEL_LAYERS = {
+    #     'default': {
+    #         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    #         'CONFIG': {
+    #             'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+    #         },
+    #     },
+    # }
+    pass

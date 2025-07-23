@@ -24,6 +24,7 @@
             color: white;
             padding: 20px;
             text-align: center;
+            position: relative;
         }
         
         .chat-messages {
@@ -39,6 +40,7 @@
             border-radius: 20px;
             max-width: 80%;
             animation: fadeIn 0.3s ease-in;
+            clear: both;
         }
         
         @keyframes fadeIn {
@@ -51,16 +53,19 @@
             color: white;
             margin-left: auto;
             text-align: right;
+            float: right;
         }
         
         .message.received {
             background: white;
             border: 1px solid #ddd;
+            float: left;
         }
         
         .message.agent {
             background: #28a745;
             color: white;
+            float: left;
         }
         
         .message .sender {
@@ -117,6 +122,7 @@
         #messageInput:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            outline: none;
         }
         
         .send-btn {
@@ -127,16 +133,27 @@
             background: #007bff;
             color: white;
             font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .send-btn:hover {
             background: #0056b3;
         }
         
+        .send-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
         .back-btn {
             position: absolute;
             left: 20px;
-            top: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
             color: white;
@@ -149,6 +166,23 @@
             background: rgba(255,255,255,0.3);
             color: white;
             text-decoration: none;
+        }
+
+        .connection-status {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .connection-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .connection-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
         }
     </style>
 </head>
@@ -166,6 +200,10 @@
                     Connect with Available Agents
                 {% endif %}
             </p>
+        </div>
+        
+        <div id="connectionStatus" class="connection-status">
+            <i class='bx bx-wifi'></i> Connecting...
         </div>
         
         <div id="agentStatus" class="status-indicator status-offline" style="display: none;">
@@ -210,9 +248,10 @@
         const isAgent = {{ is_agent|yesno:"true,false" }};
         const username = "{{ request.user.username }}";
         
-        // WebSocket connection
+        // WebSocket connection with proper protocol handling
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/'
+            protocol + '//' + window.location.host + '/ws/chat/'
         );
         
         const messagesContainer = document.getElementById('chatMessages');
@@ -220,28 +259,60 @@
         const sendBtn = document.getElementById('sendBtn');
         const agentStatus = document.getElementById('agentStatus');
         const typingIndicator = document.getElementById('typingIndicator');
+        const connectionStatus = document.getElementById('connectionStatus');
         
         let onlineAgents = new Set();
+        let isConnected = false;
+        
+        // Show connection status
+        connectionStatus.style.display = 'block';
+        connectionStatus.className = 'connection-status';
+        connectionStatus.innerHTML = '<i class="bx bx-wifi"></i> Connecting...';
+        
+        chatSocket.onopen = function(e) {
+            isConnected = true;
+            connectionStatus.className = 'connection-status connected';
+            connectionStatus.innerHTML = '<i class="bx bx-wifi"></i> Connected';
+            setTimeout(() => {
+                connectionStatus.style.display = 'none';
+            }, 2000);
+            sendBtn.disabled = false;
+        };
         
         chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            
-            if (data.type === 'chat') {
-                addMessage(data);
-            } else if (data.type === 'agent_status') {
-                updateAgentStatus(data);
+            try {
+                const data = JSON.parse(e.data);
+                
+                if (data.type === 'chat') {
+                    addMessage(data);
+                } else if (data.type === 'agent_status') {
+                    updateAgentStatus(data);
+                } else if (data.type === 'error') {
+                    addSystemMessage(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error parsing WebSocket message:', error);
+                addSystemMessage('Error receiving message', 'error');
             }
         };
         
         chatSocket.onclose = function(e) {
+            isConnected = false;
             console.error('Chat socket closed unexpectedly');
-            // Show reconnection message
-            addSystemMessage('Connection lost. Please refresh the page to reconnect.');
+            connectionStatus.style.display = 'block';
+            connectionStatus.className = 'connection-status disconnected';
+            connectionStatus.innerHTML = '<i class="bx bx-wifi-off"></i> Connection lost. Refresh to reconnect.';
+            sendBtn.disabled = true;
+        };
+        
+        chatSocket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+            addSystemMessage('Connection error. Please refresh the page.', 'error');
         };
         
         function addMessage(data) {
             const messageDiv = document.createElement('div');
-            const isOwnMessage = data.sender === username;
+            const isOwnMessage = data.is_own_message || data.sender === username;
             
             let messageClass = 'message ';
             if (isOwnMessage) {
@@ -256,7 +327,7 @@
             
             let messageHTML = '';
             if (!isOwnMessage) {
-                messageHTML += `<div class="sender">${data.sender}`;
+                messageHTML += `<div class="sender">${escapeHtml(data.sender)}`;
                 if (data.is_agent) {
                     messageHTML += ` <i class='bx bx-badge-check' title="Verified Agent"></i>`;
                 }
@@ -267,13 +338,19 @@
             
             messageDiv.innerHTML = messageHTML;
             messagesContainer.appendChild(messageDiv);
+            
+            // Clear float and scroll to bottom
+            const clearDiv = document.createElement('div');
+            clearDiv.style.clear = 'both';
+            messagesContainer.appendChild(clearDiv);
+            
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
         
-        function addSystemMessage(message) {
+        function addSystemMessage(message, type = 'info') {
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'status-indicator status-offline';
-            messageDiv.innerHTML = `<i class='bx bx-info-circle'></i> ${message}`;
+            messageDiv.className = type === 'error' ? 'status-indicator status-offline' : 'status-indicator status-online';
+            messageDiv.innerHTML = `<i class='bx bx-info-circle'></i> ${escapeHtml(message)}`;
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
@@ -283,7 +360,7 @@
                 if (data.status === 'online') {
                     onlineAgents.add(data.agent_name);
                     agentStatus.className = 'status-indicator status-online';
-                    agentStatus.innerHTML = `<i class='bx bx-wifi'></i> Agent ${data.agent_name} is now online`;
+                    agentStatus.innerHTML = `<i class='bx bx-wifi'></i> Agent ${escapeHtml(data.agent_name)} is now online`;
                     agentStatus.style.display = 'block';
                 } else if (data.status === 'offline') {
                     onlineAgents.delete(data.agent_name);
@@ -297,23 +374,45 @@
         
         function sendMessage() {
             const message = messageInput.value.trim();
-            if (message) {
-                chatSocket.send(JSON.stringify({
-                    'message': message,
-                    'type': 'chat'
-                }));
-                messageInput.value = '';
+            if (message && isConnected) {
+                // Disable send button to prevent double sending
+                sendBtn.disabled = true;
+                
+                try {
+                    chatSocket.send(JSON.stringify({
+                        'message': message,
+                        'type': 'chat'
+                    }));
+                    messageInput.value = '';
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    addSystemMessage('Failed to send message', 'error');
+                }
+                
+                // Re-enable send button after a short delay
+                setTimeout(() => {
+                    sendBtn.disabled = false;
+                }, 500);
+            } else if (!isConnected) {
+                addSystemMessage('Not connected. Please refresh the page.', 'error');
             }
         }
         
         // Event listeners
-        sendBtn.addEventListener('click', sendMessage);
+        sendBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            sendMessage();
+        });
         
         messageInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
+                e.preventDefault();
                 sendMessage();
             }
         });
+        
+        // Focus on input when page loads
+        messageInput.focus();
         
         // Auto scroll to bottom on load
         messagesContainer.scrollTop = messagesContainer.scrollHeight;

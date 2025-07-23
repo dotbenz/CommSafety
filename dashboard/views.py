@@ -273,11 +273,12 @@ def profile_update(request):
 
 
 
-# 7. Add to views.py
 @login_required(login_url='index')
 def chat(request):
     # Check if user is an agent to determine UI
     is_agent = request.user.groups.filter(name='Law Enforcement Agents').exists()
+    
+    # Get recent messages for the user
     recent_messages = ChatMessage.objects.select_related('sender').order_by('-timestamp')[:50][::-1]
     
     context = {
